@@ -5,8 +5,6 @@ import { PolymarketService } from './polymarket.service';
 import { Command } from 'commander'
 const figlet = require("figlet");
 
-
-
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
   // load environment variables from .env file
@@ -17,14 +15,17 @@ async function bootstrap() {
   program
     .version("1.0.0")
     .description("A CLI to trade on Polymarket")
-    .option("-l, --ls", "List available markets")
+    .option("-l, --ls <question filter>", "List available markets with question filter")
     .parse(process.argv);
+
 
   const options = program.opts();
   console.log(options);
+  //list all markets matching filter
   if(options.ls) {
+    console.log(options.ls);
     const markets = await polymarketService.getMarkets();
-    console.table(markets);
+    console.table(markets.filter(market => market.question.toLowerCase().includes(options.ls.toLowerCase())));
   }
 }
 bootstrap();
