@@ -33,12 +33,12 @@ async function bootstrap() {
 
 
   const options = program.opts();
-  console.log(options);
+  // console.log(options);
   //list all markets matching filter
-  if (options.ls) {
-    console.log(options.ls);
-    const markets = await polymarketService.getMarkets();
-    console.table(markets.filter(market => market.question.toLowerCase().includes(options.ls.toLowerCase())));
+  if (options.list) {
+    const markets = await polymarketService.getMarketsInListFormat();
+    console.log(markets.length);
+    console.table(markets.filter(market => market.question.toLowerCase().includes(options.list.toLowerCase())));
   }
   //buy token
   if (options.buy && options.buy.length == 3) {
