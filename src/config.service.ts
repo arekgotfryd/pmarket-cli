@@ -6,11 +6,9 @@ import { ApiKeyCreds } from "@polymarket/clob-client";
 
 const polyCliDir = '.poly-cli';
 const configJson = 'config.json';
-//todo 
-//write unit tests for this service
 @Injectable()
 export class ConfigService {
-    config: any;
+    private config: any;
     constructor() {
         this.isConfigAvailable() ? this.loadConfig() : this.createNewConfig();
     }

@@ -1,16 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as dotenv from 'dotenv';
 import { PolymarketService } from './polymarket.service';
 import { Command } from 'commander'
 import { Side } from '@polymarket/clob-client';
 import { ContractService } from './contract.service';
-const figlet = require("figlet");
+import * as figlet from "figlet";
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
-  // load environment variables from .env file
-  dotenv.config();
   const polymarketService = app.get(PolymarketService);
   const contractService = app.get(ContractService);
   console.log(figlet.textSync("Poly-CLI"));
