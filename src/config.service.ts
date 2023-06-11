@@ -32,7 +32,9 @@ export class ConfigService {
             rpcProvider: '',
             privateKey: '',
         };
-        mkdirSync(homedir() + sep + polyCliDir);
+        if(!existsSync(homedir() + sep + polyCliDir)){
+            mkdirSync(homedir() + sep + polyCliDir);
+        }
         writeFileSync(configPath, JSON.stringify(this.config, null, 4));
     }
 

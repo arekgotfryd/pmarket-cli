@@ -2,6 +2,7 @@ import { Side } from '@polymarket/clob-client';
 import { ConfigService } from './config.service';
 import { PolymarketService } from './polymarket.service';
 import { Test } from '@nestjs/testing';
+import { ethers } from 'ethers';
 
 const markets = [{
     "condition_id": "0xa00a22b16d602abf9ed695404df68a71ddd4ef05573bf9590de4f0fccf096c93",
@@ -104,11 +105,32 @@ describe('PolymarketService', () => {
     let polymarketService: PolymarketService;
 
     beforeEach(async () => {
+        //mock conifg service
+        let configService = {
+            get: (key: string) => {
+                if (key === "privateKey") {
+                    const wallet = ethers.Wallet.createRandom();
+                    const privateKey = wallet.privateKey;
+                    return privateKey;
+                } else {
+                    return "something else"
+                }
+            },
+            getCreds: () => {
+                return {
+                    key: 'something',
+                    secret: 'secret',
+                    passphrase: 'passphrase'
+                }
+            }
+        };
         const moduleRef = await Test.createTestingModule({
             providers: [PolymarketService, ConfigService],
-        }).compile();
+        }).overrideProvider(ConfigService)
+            .useValue(configService).compile();
 
         polymarketService = moduleRef.get<PolymarketService>(PolymarketService);
+        jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
     });
 
 
