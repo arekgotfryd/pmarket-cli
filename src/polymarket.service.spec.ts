@@ -103,8 +103,7 @@ const orderBook = {
 
 describe('PolymarketService', () => {
     let polymarketService: PolymarketService;
-
-    beforeEach(async () => {
+    beforeAll(async () => {
         //mock conifg service
         let configService = {
             get: (key: string) => {
@@ -133,9 +132,37 @@ describe('PolymarketService', () => {
         jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
     });
 
+    // beforeEach(async () => {
+    //     //mock conifg service
+    //     let configService = {
+    //         get: (key: string) => {
+    //             if (key === "privateKey") {
+    //                 const wallet = ethers.Wallet.createRandom();
+    //                 const privateKey = wallet.privateKey;
+    //                 return privateKey;
+    //             } else {
+    //                 return "something else"
+    //             }
+    //         },
+    //         getCreds: () => {
+    //             return {
+    //                 key: 'something',
+    //                 secret: 'secret',
+    //                 passphrase: 'passphrase'
+    //             }
+    //         }
+    //     };
+    //     const moduleRef = await Test.createTestingModule({
+    //         providers: [PolymarketService, ConfigService],
+    //     }).overrideProvider(ConfigService)
+    //         .useValue(configService).compile();
+
+    //     polymarketService = moduleRef.get<PolymarketService>(PolymarketService);
+    //     jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
+    // });
+
 
     it('should only return markets accepting orders ', async () => {
-        jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
         const marketsAcceptingOrders = await polymarketService.getMarketsAcceptingOrders();
         expect(marketsAcceptingOrders.length).toBe(1);
         expect(marketsAcceptingOrders[0].token_0.token_id).toBe("14811968980410449224099097755442778591369245152075435522945362809904270343154");
