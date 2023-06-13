@@ -6,6 +6,7 @@ import { BuyStrategy } from "./buy-strategy"
 import { SellStrategy } from "./sell-strategy"
 import { AllowanceStrategy } from "./allowance-strategy"
 import { OrderBookStrategy } from "./order-book-strategy"
+import { CancelAllStrategy } from "./cancel-all-strategy"
 
 export class Context {
     // The context maintains a reference to one of the strategy
@@ -50,6 +51,10 @@ export class Context {
         //show order book for specific token
         if (options.orderBook) {
             strategy = new OrderBookStrategy(this.polymarketService);
+        }
+        //cancel all orders
+        if (options.cancelAll) {
+            strategy = new CancelAllStrategy(this.polymarketService);
         }
         return strategy;
     }
