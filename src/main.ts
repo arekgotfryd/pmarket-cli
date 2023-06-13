@@ -1,16 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PolymarketService } from './polymarket.service';
+import { PolymarketService } from './services/polymarket.service';
 import { getProgram } from './program';
-import { ContractService } from './contract.service';
+import { ContractService } from './services/contract.service';
 import * as figlet from "figlet";
 import { Context } from './strategy/context';
-import { Strategy } from './strategy/strategy';
-
-export const setAndExecuteStrategy = (strategy: Strategy, options: any, context: Context): void => {
-  context.setStrategy(strategy);
-  context.executeStrategy(options);
-}
+import { setAndExecuteStrategy } from './utils';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);

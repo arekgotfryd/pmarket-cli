@@ -1,4 +1,4 @@
-import { ContractService } from "../contract.service";
+import { ContractService } from "../services/contract.service";
 import { Strategy } from "./strategy";
 
 export class AllowanceStrategy implements Strategy {

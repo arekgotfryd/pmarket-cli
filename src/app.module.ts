@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { PolymarketService } from './polymarket.service';
-import { ConfigService } from './config.service';
-import { ContractService } from './contract.service';
+import { PolymarketService } from './services/polymarket.service';
+import { ConfigService } from './services/config.service';
+import { ContractService } from './services/contract.service';
 
 @Module({
   imports: [HttpModule],

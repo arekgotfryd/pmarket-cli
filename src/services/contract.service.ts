@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ethers } from "ethers";
-import { usdcContractABI } from "./abi/usdc";
+import { usdcContractABI } from "../abi/usdc";
 import { ConfigService } from "./config.service";
 
 @Injectable()

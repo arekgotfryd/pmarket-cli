@@ -1,4 +1,4 @@
-import { PolymarketService } from "../polymarket.service";
+import { PolymarketService } from "../services/polymarket.service";
 import { Strategy } from "./strategy";
 
 export class OrderBookStrategy implements Strategy {
