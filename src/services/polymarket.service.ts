@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 import { ConfigService } from "./config.service";
 let creds: ApiKeyCreds;
 const CLOB_API_ENDPOINT = "https://clob.polymarket.com/";
-
+type FeeResponse = { side: 'taker' | 'maker', fee: number };
 @Injectable()
 export class PolymarketService {
   clobClient: ClobClient;
@@ -48,7 +48,12 @@ export class PolymarketService {
     });
   }
 
-  async determineMakerOrTakerFee(tokenId: string, side: Side, size: number, orderBook: any, price: number): Promise<number> {
+  async determineMakerOrTakerFee(tokenId: string, side: Side, size: number, orderBook: any, price: number): Promise<{ side: 'taker' | 'maker', fee: number }> {
+
+    const resp: FeeResponse = {
+      side: 'taker',
+      fee: 0
+    }
     if (side === Side.SELL) {
       //check bids
       const bids = orderBook.bids;
@@ -58,10 +63,14 @@ export class PolymarketService {
       if (sumOfSizeOfBidsWithPriceHigherThanPrice >= size) {
         //get taker
         const takerFee = await this.getFeeRateBps(tokenId, 'taker');
-        return takerFee;
+        resp.side = 'taker';
+        resp.fee = takerFee;
+        return resp;
       } else {
         const makerFee = await this.getFeeRateBps(tokenId, 'maker');
-        return makerFee;
+        resp.side = 'maker';
+        resp.fee = makerFee;
+        return resp;
       }
     } else if (side === Side.BUY) {
       //check asks
@@ -72,18 +81,25 @@ export class PolymarketService {
       if (sumOfSizeOfAsksWithPriceLowerThanPrice >= size) {
         //get taker
         const takerFee = await this.getFeeRateBps(tokenId, 'taker');
-        return takerFee;
+        // return takerFee;
+        resp.side = 'taker';
+        resp.fee = takerFee;
+        return resp;
       } else {
         const makerFee = await this.getFeeRateBps(tokenId, 'maker');
-        return makerFee;
+        // return makerFee;
+        resp.side = 'maker';
+        resp.fee = makerFee;
+        return resp;
       }
 
     }
   }
 
   async getFeeRateBps(tokenId: string, side: 'taker' | 'maker'): Promise<number> {
-    const response = await this.getMarkets();
-    const market = response.data.filter(market => market.clob_token_ids.includes(tokenId))[0];
+    const markets = await this.getMarkets();
+    const market = markets
+      .filter(market => { return market.tokens.map(token => { return token.token_id }).indexOf(tokenId) >= 0 })[0];
     return side === 'taker' ? market.taker_base_fee : market.maker_base_fee;
   }
 
@@ -96,8 +112,8 @@ export class PolymarketService {
       tokenID,
     );
     console.log(orderBook);
-    const feeRateBps = await this.determineMakerOrTakerFee(tokenID, side, amount, orderBook, price)
-    console.log("Fee rate: " + feeRateBps);
+    const feeRepsonse: FeeResponse = await this.determineMakerOrTakerFee(tokenID, side, amount, orderBook, price)
+    console.log("Fee rate: " + feeRepsonse.fee);
     const expiration = side === Side.SELL ? parseInt(((new Date().getTime() + 60 * 1000 + 10 * 1000) / 1000).toString()) : 0;
     console.log(expiration);
     console.log(side);
@@ -108,15 +124,15 @@ export class PolymarketService {
       price: price,
       side: side,
       size: amount,
-      feeRateBps: feeRateBps,
+      feeRateBps: feeRepsonse.fee,
       nonce: 0,
       expiration: expiration,
     });
     let resp;
-    if (side == Side.BUY) {
+    if (feeRepsonse.side === 'taker') {
       resp = await this.clobClient.postOrder(marketOrder, OrderType.FOK);
-    } else {
-      resp = await this.clobClient.postOrder(marketOrder, OrderType.GTD);
+    } else if(feeRepsonse.side === 'maker'){
+      resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
     }
     return resp;
   }

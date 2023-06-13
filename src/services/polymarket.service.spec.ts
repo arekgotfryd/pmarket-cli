@@ -105,7 +105,7 @@ describe('PolymarketService', () => {
     let polymarketService: PolymarketService;
     beforeAll(async () => {
         //mock conifg service
-        let configService = {
+        const configService = {
             get: (key: string) => {
                 if (key === "privateKey") {
                     const wallet = ethers.Wallet.createRandom();
@@ -132,36 +132,6 @@ describe('PolymarketService', () => {
         jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
     });
 
-    // beforeEach(async () => {
-    //     //mock conifg service
-    //     let configService = {
-    //         get: (key: string) => {
-    //             if (key === "privateKey") {
-    //                 const wallet = ethers.Wallet.createRandom();
-    //                 const privateKey = wallet.privateKey;
-    //                 return privateKey;
-    //             } else {
-    //                 return "something else"
-    //             }
-    //         },
-    //         getCreds: () => {
-    //             return {
-    //                 key: 'something',
-    //                 secret: 'secret',
-    //                 passphrase: 'passphrase'
-    //             }
-    //         }
-    //     };
-    //     const moduleRef = await Test.createTestingModule({
-    //         providers: [PolymarketService, ConfigService],
-    //     }).overrideProvider(ConfigService)
-    //         .useValue(configService).compile();
-
-    //     polymarketService = moduleRef.get<PolymarketService>(PolymarketService);
-    //     jest.spyOn(polymarketService, 'getMarkets').mockImplementation(() => Promise.resolve(markets));
-    // });
-
-
     it('should only return markets accepting orders ', async () => {
         const marketsAcceptingOrders = await polymarketService.getMarketsAcceptingOrders();
         expect(marketsAcceptingOrders.length).toBe(1);
@@ -169,17 +139,17 @@ describe('PolymarketService', () => {
     });
 
     it('should taker fee equal to 200', async () => {
-        const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation((tokenId: string, side: 'taker' | 'maker') => Promise.resolve(200));
+        const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation(() => Promise.resolve(200));
         const takerFee = await polymarketService.determineMakerOrTakerFee('14811968980410449224099097755442778591369245152075435522945362809904270343154', Side.BUY, 100, orderBook, 0.6);
         expect(spy).toHaveBeenCalledWith('14811968980410449224099097755442778591369245152075435522945362809904270343154', 'taker');
-        expect(takerFee).toBe(200);
+        expect(takerFee).toStrictEqual({fee: 200, side: 'taker'});
     });
 
     it('should return maker fee equal to 0', async () => {
-        const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation((tokenId: string, side: 'taker' | 'maker') => Promise.resolve(0));
+        const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation(() => Promise.resolve(0));
         const makerFee = await polymarketService.determineMakerOrTakerFee('14811968980410449224099097755442778591369245152075435522945362809904270343154', Side.SELL, 100, orderBook, 0.8);
         expect(spy).toHaveBeenCalledWith('14811968980410449224099097755442778591369245152075435522945362809904270343154', 'maker');
-        expect(makerFee).toBe(0);
+        expect(makerFee).toStrictEqual({fee: 0, side: 'maker'});
     });
 
 });
