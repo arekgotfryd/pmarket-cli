@@ -4,6 +4,7 @@ import { PolymarketService } from '../services/polymarket.service';
 import { Context } from './context';
 import { ConfigService } from '../services/config.service';
 import { setAndExecuteStrategy } from '../utils';
+import { ethers } from 'ethers';
 
 describe('Context', () => {
     let polymarketService: PolymarketService;
@@ -11,10 +12,29 @@ describe('Context', () => {
     let context: Context;
 
     beforeAll(async () => {
+        //mock conifg service
+        const configService = {
+            get: (key: string) => {
+                if (key === "privateKey") {
+                    const wallet = ethers.Wallet.createRandom();
+                    const privateKey = wallet.privateKey;
+                    return privateKey;
+                } else {
+                    return "something else"
+                }
+            },
+            getCreds: () => {
+                return {
+                    key: 'something',
+                    secret: 'secret',
+                    passphrase: 'passphrase'
+                }
+            }
+        };
         const moduleRef = await Test.createTestingModule({
             providers: [PolymarketService, ContractService, ConfigService],
-        })
-            .compile();
+        }).overrideProvider(ConfigService)
+            .useValue(configService).compile();
 
         polymarketService = moduleRef.get<PolymarketService>(PolymarketService);
         contractService = moduleRef.get<ContractService>(ContractService);
@@ -33,14 +53,14 @@ describe('Context', () => {
     });
 
     it('should use BuyStrategy', () => {
-        const options = { buy: ['tokenId','30','0.6'] }
+        const options = { buy: ['tokenId', '30', '0.6'] }
         const strategy = context.determineStrategy(options);
         setAndExecuteStrategy(strategy, options, context);
         expect(polymarketService.marketOrder).toHaveBeenCalled();
     });
 
     it('should use SellStrategy', () => {
-        const options = { sell: ['tokenId','100','0.99'] }
+        const options = { sell: ['tokenId', '100', '0.99'] }
         const strategy = context.determineStrategy(options);
         setAndExecuteStrategy(strategy, options, context);
         expect(polymarketService.marketOrder).toHaveBeenCalled();
@@ -59,5 +79,5 @@ describe('Context', () => {
         setAndExecuteStrategy(strategy, options, context);
         expect(polymarketService.getOrderBook).toHaveBeenCalled();
     });
-    
+
 });
