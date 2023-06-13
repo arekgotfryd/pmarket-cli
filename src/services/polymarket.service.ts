@@ -114,8 +114,6 @@ export class PolymarketService {
     console.log(orderBook);
     const feeRepsonse: FeeResponse = await this.determineMakerOrTakerFee(tokenID, side, amount, orderBook, price)
     console.log("Fee rate: " + feeRepsonse.fee);
-    const expiration = side === Side.SELL ? parseInt(((new Date().getTime() + 60 * 1000 + 10 * 1000) / 1000).toString()) : 0;
-    console.log(expiration);
     console.log(side);
     console.log(amount);
     console.log(price);
@@ -126,12 +124,14 @@ export class PolymarketService {
       size: amount,
       feeRateBps: feeRepsonse.fee,
       nonce: 0,
-      expiration: expiration,
+      expiration: 0,
     });
     let resp;
     if (feeRepsonse.side === 'taker') {
+      //fill or kill
       resp = await this.clobClient.postOrder(marketOrder, OrderType.FOK);
     } else if(feeRepsonse.side === 'maker'){
+      //good till cancelled
       resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
     }
     return resp;
@@ -139,6 +139,12 @@ export class PolymarketService {
 
   async getOrderBook(tokenId: string): Promise<any> {
     return this.clobClient.getOrderBook(tokenId);
+  }
+
+  async cancelAll(): Promise<any> {
+    const resp = await this.clobClient.cancelAll();
+    console.log(resp);
+    return resp;
   }
 
 }

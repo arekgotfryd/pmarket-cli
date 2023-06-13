@@ -42,6 +42,7 @@ describe('Context', () => {
         jest.spyOn(polymarketService, 'getMarketsAcceptingOrders').mockImplementation(() => Promise.resolve([]));
         jest.spyOn(polymarketService, 'marketOrder').mockImplementation(() => Promise.resolve({}));
         jest.spyOn(polymarketService, 'getOrderBook').mockImplementation(() => Promise.resolve({}));
+        jest.spyOn(polymarketService, 'cancelAll').mockImplementation(() => Promise.resolve({}));
         jest.spyOn(contractService, 'setAllowance').mockImplementation(() => Promise.resolve({}));
     });
 
@@ -78,6 +79,13 @@ describe('Context', () => {
         const strategy = context.determineStrategy(options);
         setAndExecuteStrategy(strategy, options, context);
         expect(polymarketService.getOrderBook).toHaveBeenCalled();
+    });
+
+    it('should use CancelAllStrategy', () => {
+        const options = { cancelAll: true }
+        const strategy = context.determineStrategy(options);
+        setAndExecuteStrategy(strategy, options, context);
+        expect(polymarketService.cancelAll).toHaveBeenCalled();
     });
 
 });

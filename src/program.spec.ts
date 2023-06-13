@@ -39,4 +39,9 @@ describe('Program', () => {
         expect(options.orderBook).toBe('tokenId');
     });
 
+    it('should parse cancel all option', () => {
+        const options = program.parse(['node','main','-c']).opts();
+        expect(options.cancelAll).toBe(true);
+    });
+
 });
