@@ -15,7 +15,6 @@ type FeeResponse = { side: 'taker' | 'maker', fee: number };
 @Injectable()
 export class PolymarketService {
   clobClient: ClobClient;
-  polygonProvider;
 
   constructor(private configService: ConfigService) {
     const provider = new ethers.providers.JsonRpcProvider(
@@ -130,7 +129,7 @@ export class PolymarketService {
     if (feeRepsonse.side === 'taker') {
       //fill or kill
       resp = await this.clobClient.postOrder(marketOrder, OrderType.FOK);
-    } else if(feeRepsonse.side === 'maker'){
+    } else if (feeRepsonse.side === 'maker') {
       //good till cancelled
       resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
     }
@@ -145,6 +144,15 @@ export class PolymarketService {
     const resp = await this.clobClient.cancelAll();
     console.log(resp);
     return resp;
+  }
+
+  async getApiKeys(): Promise<ApiKeyCreds> {
+    const apiKeys = await this.clobClient.deriveApiKey();
+    if (!apiKeys['error']) {
+      return apiKeys;
+    } else {
+      return this.clobClient.createApiKey();
+    }
   }
 
 }

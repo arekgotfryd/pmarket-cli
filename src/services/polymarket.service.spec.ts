@@ -142,14 +142,14 @@ describe('PolymarketService', () => {
         const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation(() => Promise.resolve(200));
         const takerFee = await polymarketService.determineMakerOrTakerFee('14811968980410449224099097755442778591369245152075435522945362809904270343154', Side.BUY, 100, orderBook, 0.6);
         expect(spy).toHaveBeenCalledWith('14811968980410449224099097755442778591369245152075435522945362809904270343154', 'taker');
-        expect(takerFee).toStrictEqual({fee: 200, side: 'taker'});
+        expect(takerFee).toStrictEqual({ fee: 200, side: 'taker' });
     });
 
     it('should return maker fee equal to 0', async () => {
         const spy = jest.spyOn(polymarketService, 'getFeeRateBps').mockImplementation(() => Promise.resolve(0));
         const makerFee = await polymarketService.determineMakerOrTakerFee('14811968980410449224099097755442778591369245152075435522945362809904270343154', Side.SELL, 100, orderBook, 0.8);
         expect(spy).toHaveBeenCalledWith('14811968980410449224099097755442778591369245152075435522945362809904270343154', 'maker');
-        expect(makerFee).toStrictEqual({fee: 0, side: 'maker'});
+        expect(makerFee).toStrictEqual({ fee: 0, side: 'maker' });
     });
 
 });
