@@ -44,4 +44,9 @@ describe('Program', () => {
         expect(options.cancelAll).toBe(true);
     });
 
+    it('should parse keys option', () => {
+        const options = program.parse(['node','main','-k']).opts();
+        expect(options.keys).toBe(true);
+    });
+
 });

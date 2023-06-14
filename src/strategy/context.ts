@@ -7,6 +7,7 @@ import { SellStrategy } from "./sell-strategy"
 import { AllowanceStrategy } from "./allowance-strategy"
 import { OrderBookStrategy } from "./order-book-strategy"
 import { CancelAllStrategy } from "./cancel-all-strategy"
+import { ApiKeysStrategy } from "./api-keys-strategy"
 
 export class Context {
     // The context maintains a reference to one of the strategy
@@ -55,6 +56,10 @@ export class Context {
         //cancel all orders
         if (options.cancelAll) {
             strategy = new CancelAllStrategy(this.polymarketService);
+        }
+        //api keys
+        if (options.keys) {
+            strategy = new ApiKeysStrategy(this.polymarketService);
         }
         return strategy;
     }

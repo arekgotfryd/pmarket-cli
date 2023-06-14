@@ -43,6 +43,7 @@ describe('Context', () => {
         jest.spyOn(polymarketService, 'marketOrder').mockImplementation(() => Promise.resolve({}));
         jest.spyOn(polymarketService, 'getOrderBook').mockImplementation(() => Promise.resolve({}));
         jest.spyOn(polymarketService, 'cancelAll').mockImplementation(() => Promise.resolve({}));
+        jest.spyOn(polymarketService, 'getApiKeys').mockImplementation(() => Promise.resolve({} as any));
         jest.spyOn(contractService, 'setAllowance').mockImplementation(() => Promise.resolve({}));
     });
 
@@ -86,6 +87,13 @@ describe('Context', () => {
         const strategy = context.determineStrategy(options);
         setAndExecuteStrategy(strategy, options, context);
         expect(polymarketService.cancelAll).toHaveBeenCalled();
+    });
+
+    it('should use ApiKeysStrategy', () => {
+        const options = { keys: true }
+        const strategy = context.determineStrategy(options);
+        setAndExecuteStrategy(strategy, options, context);
+        expect(polymarketService.getApiKeys).toHaveBeenCalled();
     });
 
 });

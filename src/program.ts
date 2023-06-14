@@ -11,5 +11,6 @@ export const getProgram = (): Command => {
     .option("-a, --allowance <amount in USDC>", "Set USDC allowance for CTFExchange contract. Usage: poly-cli -a <amount in USDC>")
     .option("-o, --orderBook <tokenId>", "Show order book for specific tokenId. Usage: poly-cli -o <token id>")
     .option("-c, --cancelAll", "Cancel all open orders. Usage: poly-cli -c")
+    .option("-k, --keys", "Get or generate api keys. Usage: poly-cli -k")
   return program;
 }
