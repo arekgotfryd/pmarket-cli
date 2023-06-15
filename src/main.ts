@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PolymarketService } from './services/polymarket.service';
@@ -24,7 +25,9 @@ async function bootstrap() {
   //strategy pattern to handle different commands
   const context = new Context(polymarketService, contractService);
   const strategy = context.determineStrategy(options);
-  setAndExecuteStrategy(strategy, options, context);
+  if(strategy) {
+    setAndExecuteStrategy(strategy, options, context);
+  }
 }
 bootstrap();
 

@@ -1,8 +1,23 @@
 {
-  "name": "nest-typescript-starter",
-  "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
+  "name": "poly-cli",
+  "version": "0.7.0",
+  "description": "CLI tool to trade on Polymarket",
   "license": "MIT",
+  "author": {
+    "name": "Arkadiusz Gotfryd",
+    "email": "arekgotfryd@g.pl"
+  },
+  "keywords": [
+    "cli",
+    "npmtool",
+    "polymarket"
+  ],
+  "repository": "https://github.com/arekgotfryd/poly-cli",
+  "homepage": "https://github.com/arekgotfryd/poly-cli/blob/master/README.md",
+  "main": "dist/main.js",
+  "bin": {
+    "poly-cli": "./dist/main.js"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
