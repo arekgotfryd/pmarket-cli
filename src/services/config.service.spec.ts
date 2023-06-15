@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, unlink, writeFileSync } from 'fs';
 import { ConfigService } from './config.service';
 jest.mock('os');
-const polyCliDir = '.poly-cli';
+const polyCliDir = '.polycli';
 const configJson = 'config.json';
 const configPath = polyCliDir + '/' + configJson;
 

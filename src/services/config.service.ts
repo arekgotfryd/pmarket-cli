@@ -4,7 +4,7 @@ import { sep } from "path";
 import { homedir } from "os";
 import { ApiKeyCreds } from "@polymarket/clob-client";
 
-const polyCliDir = '.poly-cli';
+const polyCliDir = '.polycli';
 const configJson = 'config.json';
 @Injectable()
 export class ConfigService {
