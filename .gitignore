@@ -21,5 +21,5 @@ npm-debug.log
 /dist
 # env variables
 .env
-# poly-cli ConfigService test dir
-.poly-cli
+# polycli ConfigService test dir
+.polycli

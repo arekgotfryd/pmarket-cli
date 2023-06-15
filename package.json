@@ -1,5 +1,5 @@
 {
-  "name": "poly-cli",
+  "name": "polycli",
   "version": "0.7.0",
   "description": "CLI tool to trade on Polymarket",
   "license": "MIT",
@@ -12,11 +12,11 @@
     "npmtool",
     "polymarket"
   ],
-  "repository": "https://github.com/arekgotfryd/poly-cli",
-  "homepage": "https://github.com/arekgotfryd/poly-cli/blob/master/README.md",
+  "repository": "https://github.com/arekgotfryd/polycli",
+  "homepage": "https://github.com/arekgotfryd/polycli/blob/master/README.md",
   "main": "dist/main.js",
   "bin": {
-    "poly-cli": "./dist/main.js"
+    "polycli": "./dist/main.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
