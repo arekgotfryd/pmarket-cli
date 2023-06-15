@@ -9,7 +9,7 @@ import { Context } from './strategy/context';
 import { setAndExecuteStrategy } from './utils';
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  const app = await NestFactory.createApplicationContext(AppModule,{ logger: false });
   const polymarketService = app.get(PolymarketService);
   const contractService = app.get(ContractService);
   console.log(figlet.textSync("Poly-CLI"));
