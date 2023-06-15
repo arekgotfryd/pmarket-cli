@@ -7,15 +7,26 @@ on:
 
 jobs:
   publish:
+    name: Publish package to npm
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: checkout
+      - name: "☁️ checkout repository"
         uses: actions/checkout@v2
-      - name: node
-        uses: actions/setup-node@v2
+      - name: "🔧 setup node"
+        uses: actions/setup-node@v2.1.5
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org
+
+      - name: "🔧 install npm@latest"
+        run: npm i -g npm@latest
+
+      - name: "📦 install dependencies"
+        uses: bahmutov/npm-install@v1
+
+      - name : "📦 build package"
+        run: npm run build --if-present
+
       - name: publish
         run: npm publish --access public
         env:
