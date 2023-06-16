@@ -1,4 +1,4 @@
-# polycli
+# pmarket-cli
 
 Command line interface for Polymarket.
 
@@ -19,7 +19,7 @@ Command line interface for Polymarket.
 ## Installation
 
 ```shell
-npm i polycli -g
+npm i pmarket-cli -g
 ```
 
 ---
@@ -28,7 +28,7 @@ npm i polycli -g
 
 After successful installation you need to go through four steps in order
 to place buy and sell orders with the tool. Setup requires editing config.json file
-which is located under `~/.polycli/config.json` where `~` is your home directory.
+which is located under `~/.pmarket-cli/config.json` where `~` is your home directory.
 
 1. You need to generate api key to access polygon network. I recommend using [infura.io](https://www.infura.io/) but you can use any other provider you like [Steps to generate key](https://docs.infura.io/getting-started).
    Once you generate the key set rpcProvider value in config.json file to your rpc provider url.
@@ -39,7 +39,7 @@ which is located under `~/.polycli/config.json` where `~` is your home directory
 3. You will need to generate an api key for polymarket. You can do this by running the following command:
 
 ```shell
-polycli -k
+pmarket-cli -k
 ```
 
 Take values from the response and set them in config.json file (apiKey, apiSecret and passphrase entries).
@@ -47,7 +47,7 @@ Take values from the response and set them in config.json file (apiKey, apiSecre
 4. Set allowance for CTFExchange contract. You can do this by running the following command. This will allow CTFExchange contract to spend your USDC tokens.
 
 ```shell
-polycli -a 500
+pmarket-cli -a 500
 ```
 
 After all 4 steps your config.json file should have all entries filled with values.
@@ -61,7 +61,7 @@ After all 4 steps your config.json file should have all entries filled with valu
 Command
 
 ```shell
-polycli -l "Will Trump attend the first RNC debate?"
+pmarket-cli -l "Will Trump attend the first RNC debate?"
 ```
 
 Response
@@ -89,7 +89,7 @@ Response
 Command
 
 ```shell
-polycli -b 12110463059584809904811790486163860991533989713640269122405796144537637099628 30 0.5
+pmarket-cli -b 12110463059584809904811790486163860991533989713640269122405796144537637099628 30 0.5
 ```
 
 Response
@@ -113,7 +113,7 @@ Response
 Command
 
 ```shell
-polycli -s 12110463059584809904811790486163860991533989713640269122405796144537637099628 30 0.5
+pmarket-cli -s 12110463059584809904811790486163860991533989713640269122405796144537637099628 30 0.5
 ```
 
 Response
@@ -137,7 +137,7 @@ Response
 Command
 
 ```shell
-polycli -a 500
+pmarket-cli -a 500
 ```
 
 Response
@@ -173,7 +173,7 @@ Block Gas Limit: 30323827
 Command
 
 ```shell
-polycli -o 12110463059584809904811790486163860991533989713640269122405796144537637099628
+pmarket-cli -o 12110463059584809904811790486163860991533989713640269122405796144537637099628
 ```
 
 Response
@@ -210,7 +210,7 @@ Response
 Command
 
 ```shell
-polycli -k
+pmarket-cli -k
 ```
 
 Response
@@ -230,7 +230,7 @@ Response
 Command
 
 ```shell
-polycli -c
+pmarket-cli -c
 ```
 
 Response
@@ -245,10 +245,10 @@ Response
 
 ## Issues
 
-Please use the [Issue Tracker](https://github.com/arekgotfryd/polycli/issues) to report any issues or bugs.
+Please use the [Issue Tracker](https://github.com/arekgotfryd/pmarket-cli/issues) to report any issues or bugs.
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/arekgotfryd/polycli/blob/master/LICENSE).
+This project is licensed under the [MIT License](https://github.com/arekgotfryd/pmarket-cli/blob/master/LICENSE).
