@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule,{ logger: false });
   const polymarketService = app.get(PolymarketService);
   const contractService = app.get(ContractService);
-  console.log(figlet.textSync("PolyCLI"));
+  console.log(figlet.textSync("PmarketCLI"));
   const program = getProgram();
 
   //show help if no arguments are passed

@@ -1,5 +1,5 @@
 {
-  "name": "polycli",
+  "name": "pmarket-cli",
   "version": "0.7.0",
   "description": "CLI tool to trade on Polymarket",
   "license": "MIT",
@@ -12,11 +12,11 @@
     "npmtool",
     "polymarket"
   ],
-  "repository": "https://github.com/arekgotfryd/polycli",
-  "homepage": "https://github.com/arekgotfryd/polycli/blob/master/README.md",
+  "repository": "https://github.com/arekgotfryd/pmarket-cli",
+  "homepage": "https://github.com/arekgotfryd/pmarket-cli/blob/master/README.md",
   "main": "dist/main.js",
   "bin": {
-    "polycli": "./dist/main.js"
+    "pmarket-cli": "./dist/main.js"
   },
   "scripts": {
     "prebuild": "rimraf dist",
