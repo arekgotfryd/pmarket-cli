@@ -21,3 +21,4 @@ npm-debug.log
 .env
 # pmarketcli ConfigService test dir
 .pmarketcli
+/dist/src

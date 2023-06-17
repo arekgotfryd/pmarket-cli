@@ -1,22 +1,23 @@
-const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
+const ShebangPlugin = require('webpack-shebang-plugin');
 
 module.exports = {
-  entry: './src/main.ts',
-  mode: 'production',
-  target: 'node',
+  entry: "./src/main.ts",
+  mode: "production",
+  target: "node",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    path: path.resolve(__dirname, "dist"),
+    filename: "main.js",
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: [".ts", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
     ],
@@ -31,4 +32,5 @@ module.exports = {
       }),
     ],
   },
+  plugins: [new ShebangPlugin()]
 };
