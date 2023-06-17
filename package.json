@@ -31,7 +31,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "echo 'No e2e tests implemented yet.'"
+    "test:e2e": "echo 'No e2e tests implemented yet.'",
+    "build:postinstall": "nest build --webpack --webpackPath webpack.postinstall.config.js",
+    "postinstall": "node ./scripts/create-config.js"
   },
   "dependencies": {
     "@nestjs/axios": "^2.0.0",

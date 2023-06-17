@@ -17,7 +17,7 @@ Command line interface for Polymarket.
 ---
 
 ## Installation
-
+Minimum required node version is 16.20.0
 ```shell
 npm i pmarket-cli -g
 ```
