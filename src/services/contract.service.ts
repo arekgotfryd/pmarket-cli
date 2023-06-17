@@ -12,10 +12,14 @@ export class ContractService {
         this.polygonProvider = new ethers.providers.JsonRpcProvider(
             this.configService.get("rpcProvider")
         );
-        this.wallet = new ethers.Wallet(
-            this.configService.get("privateKey"),
-            this.polygonProvider
-        );
+        try {
+            this.wallet = new ethers.Wallet(
+                this.configService.get("privateKey"),
+                this.polygonProvider
+            );
+        } catch (error) {
+            console.log("Please provide valid private key and rpc provider in config.json file");
+        }
     }
 
     async setAllowance(amountOfAllowedUSDC: number): Promise<any> {

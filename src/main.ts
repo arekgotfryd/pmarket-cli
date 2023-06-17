@@ -7,12 +7,13 @@ import { ContractService } from './services/contract.service';
 import * as figlet from "figlet";
 import { Context } from './strategy/context';
 import { setAndExecuteStrategy } from './utils';
+import { name } from '../package.json';
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule,{ logger: false });
+  const app = await NestFactory.createApplicationContext(AppModule, { logger: false });
   const polymarketService = app.get(PolymarketService);
   const contractService = app.get(ContractService);
-  console.log(figlet.textSync("PmarketCLI"));
+  console.log(figlet.textSync(name));
   const program = getProgram();
 
   //show help if no arguments are passed
@@ -25,7 +26,7 @@ async function bootstrap() {
   //strategy pattern to handle different commands
   const context = new Context(polymarketService, contractService);
   const strategy = context.determineStrategy(options);
-  if(strategy) {
+  if (strategy) {
     setAndExecuteStrategy(strategy, options, context);
   }
 }
