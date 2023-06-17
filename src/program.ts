@@ -1,9 +1,10 @@
 import { Command } from 'commander'
+import { version } from '../package.json'
 
 export const getProgram = (): Command => {
   const program = new Command();
   program
-    .version("0.7.0")
+    .version(version)
     .description("Command line interface for Polymarket")
     .option("-l, --list <question filter>", "List available markets with question filter. Usage: pmarket-cli -l <question filter>")
     .option("-b, --buy <args...>", "Buy token order. Usage: pmarket-cli -b <token id> <amount in USDC> <price>")
