@@ -1,4 +1,4 @@
-import { PolymarketService } from "src/services/polymarket.service";
+import { PolymarketService } from "../services/polymarket.service";
 import { Strategy } from "./strategy";
 
 export class ApiKeysStrategy implements Strategy {
