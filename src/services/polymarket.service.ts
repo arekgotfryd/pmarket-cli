@@ -15,20 +15,28 @@ type FeeResponse = { side: 'taker' | 'maker', fee: number };
 @Injectable()
 export class PolymarketService {
   clobClient: ClobClient;
+  signer: ethers.Wallet;
 
   constructor(private configService: ConfigService) {
     const provider = new ethers.providers.JsonRpcProvider(
       this.configService.get("rpcProvider")
     );
-    const signer = new ethers.Wallet(
-      this.configService.get("privateKey"),
-      provider
-    );
+    try {
+      this.signer = new ethers.Wallet(
+        this.configService.get("privateKey"),
+        provider
+      );
+    } catch (error) {
+      console.log(
+        "Please provide valid private key and rpc provider in config.json file"
+      );
+    }
+
     creds = this.configService.getCreds();
     this.clobClient = new ClobClient(
       CLOB_API_ENDPOINT,
       Chain.POLYGON,
-      signer,
+      this.signer,
       creds
     );
   }
