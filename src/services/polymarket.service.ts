@@ -80,13 +80,11 @@ export class PolymarketService {
       if (sumOfSizeOfAsksWithPriceLowerThanPrice >= size) {
         //get taker
         const takerFee = await this.getFeeRateBps(tokenId, 'taker');
-        // return takerFee;
         resp.side = 'taker';
         resp.fee = takerFee;
         return resp;
       } else {
         const makerFee = await this.getFeeRateBps(tokenId, 'maker');
-        // return makerFee;
         resp.side = 'maker';
         resp.fee = makerFee;
         return resp;
@@ -111,25 +109,29 @@ export class PolymarketService {
       tokenID,
     );
     console.log(orderBook);
-    const feeRepsonse: FeeResponse = await this.determineMakerOrTakerFee(tokenID, side, amount, orderBook, price)
-    console.log("Fee rate: " + feeRepsonse.fee);
+    const feeResponse: FeeResponse = await this.determineMakerOrTakerFee(tokenID, side, amount, orderBook, price)
+    console.log("Fee rate: " + feeResponse.fee);
     console.log(side);
-    console.log(amount);
-    console.log(price);
+    console.log("Amount of shares/tokens: " + amount);
+    console.log("Price" + price);
     const marketOrder = await this.clobClient.createOrder({
       tokenID: tokenID,
       price: price,
       side: side,
       size: amount,
-      feeRateBps: feeRepsonse.fee,
+      feeRateBps: feeResponse.fee,
       nonce: 0,
       expiration: 0,
     });
+    console.log(marketOrder);
     let resp;
-    if (feeRepsonse.side === 'taker') {
+    if (feeResponse.side === 'taker' && side === Side.BUY) {
       //fill or kill
       resp = await this.clobClient.postOrder(marketOrder, OrderType.FOK);
-    } else if (feeRepsonse.side === 'maker') {
+    } else if (feeResponse.side === 'taker' && side === Side.SELL) {
+      //good till cancelled
+      resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
+    } else if (feeResponse.side === 'maker') {
       //good till cancelled
       resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
     }

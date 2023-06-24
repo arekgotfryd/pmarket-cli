@@ -1,8 +1,9 @@
-import { Side } from '@polymarket/clob-client';
+import { ClobClient, OrderBookSummary, OrderType, Side } from '@polymarket/clob-client';
 import { ConfigService } from './config.service';
 import { PolymarketService } from './polymarket.service';
 import { Test } from '@nestjs/testing';
 import { ethers } from 'ethers';
+import { SignatureType, SignedOrder } from '@polymarket/order-utils';
 
 const markets = [{
     "condition_id": "0xa00a22b16d602abf9ed695404df68a71ddd4ef05573bf9590de4f0fccf096c93",
@@ -78,27 +79,30 @@ const markets = [{
     "taker_base_fee": 0
 }]
 
-const orderBook = {
+const orderBook:OrderBookSummary = {
     bids: [
         {
-            price: 0.5,
-            size: 100
+            price: '0.5',
+            size: '100'
         },
         {
-            price: 0.4,
-            size: 100
+            price: '0.4',
+            size: '100'
         }
     ],
     asks: [
         {
-            price: 0.6,
-            size: 100
+            price: '0.6',
+            size: '100'
         },
         {
-            price: 0.7,
-            size: 100
+            price: '0.7',
+            size: '100'
         }
-    ]
+    ],
+    market: 'marketID',
+    asset_id: 'asset_id',
+    hash: 'hash'    
 }
 
 describe('PolymarketService', () => {
@@ -150,6 +154,85 @@ describe('PolymarketService', () => {
         const makerFee = await polymarketService.determineMakerOrTakerFee('14811968980410449224099097755442778591369245152075435522945362809904270343154', Side.SELL, 100, orderBook, 0.8);
         expect(spy).toHaveBeenCalledWith('14811968980410449224099097755442778591369245152075435522945362809904270343154', 'maker');
         expect(makerFee).toStrictEqual({ fee: 0, side: 'maker' });
+    });
+
+    it('should call postOrder with BUY OrderType.FOK', async () => {
+        const signedOrder:SignedOrder = {
+            signature: '',
+            salt: '',
+            maker: '',
+            signer: '',
+            taker: '',
+            tokenId: '',
+            makerAmount: '',
+            takerAmount: '',
+            expiration: '',
+            nonce: '',
+            feeRateBps: '',
+            side: Side.BUY,
+            signatureType: SignatureType.EOA
+        };
+        jest.spyOn(polymarketService, 'determineMakerOrTakerFee').mockImplementation(() => Promise.resolve({ fee: 0, side: 'taker' }));
+
+        const getOrderBookSpy = jest.spyOn(ClobClient.prototype, 'getOrderBook');
+        getOrderBookSpy.mockImplementation((tokenID):Promise<OrderBookSummary> => {
+          // Mocked implementation
+          return Promise.resolve(orderBook);
+        });
+
+        const createOrderBookSpy = jest.spyOn(ClobClient.prototype, 'createOrder');
+        createOrderBookSpy.mockImplementation((userOrder):Promise<SignedOrder> => {
+          // Mocked implementation
+          return Promise.resolve(signedOrder);
+        });
+
+        const postOrderSpy = jest.spyOn(ClobClient.prototype, 'postOrder');
+        postOrderSpy.mockImplementation((order,orderType,optionalParams):Promise<any> => {
+          // Mocked implementation
+          return Promise.resolve({});
+        });
+        const resp = await polymarketService.marketOrder('tokenID', Side.BUY, 20, 0.50,);
+        expect(postOrderSpy).toHaveBeenCalledWith(signedOrder, OrderType.FOK);
+        postOrderSpy.mockRestore();
+        createOrderBookSpy.mockRestore();
+    });
+
+    it('should call postOrder with SELL OrderType.GTC', async () => {
+        const signedOrder:SignedOrder = {
+            signature: '',
+            salt: '',
+            maker: '',
+            signer: '',
+            taker: '',
+            tokenId: '',
+            makerAmount: '',
+            takerAmount: '',
+            expiration: '',
+            nonce: '',
+            feeRateBps: '',
+            side: Side.SELL,
+            signatureType: SignatureType.EOA
+        };
+
+        const getOrderBookSpy = jest.spyOn(ClobClient.prototype, 'getOrderBook');
+        getOrderBookSpy.mockImplementation((tokenID):Promise<OrderBookSummary> => {
+          // Mocked implementation
+          return Promise.resolve(orderBook);
+        });
+
+        const createOrderBookSpy = jest.spyOn(ClobClient.prototype, 'createOrder');
+        createOrderBookSpy.mockImplementation((userOrder):Promise<SignedOrder> => {
+          // Mocked implementation
+          return Promise.resolve(signedOrder);
+        });
+
+        const postOrderSpy = jest.spyOn(ClobClient.prototype, 'postOrder');
+        postOrderSpy.mockImplementation((order,orderType,optionalParams):Promise<any> => {
+          // Mocked implementation
+          return Promise.resolve({});
+        });
+        const resp = await polymarketService.marketOrder('tokenID', Side.SELL, 20, 0.50,);
+        expect(postOrderSpy).toHaveBeenCalledWith(signedOrder, OrderType.GTC);
     });
 
 });
