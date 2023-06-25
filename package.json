@@ -1,6 +1,6 @@
 {
   "name": "pmarket-cli",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "CLI tool to trade on Polymarket",
   "license": "MIT",
   "author": {
