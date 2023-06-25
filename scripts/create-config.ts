@@ -16,6 +16,9 @@ const config = {
 if (!existsSync(homedir() + sep + polyCliDir)) {
     mkdirSync(homedir() + sep + polyCliDir);
 }
-writeFileSync(configPath, JSON.stringify(config, null, 4));
 
-console.log('Configuration file created:', configPath);
+if (!existsSync(configPath)) {
+    writeFileSync(configPath, JSON.stringify(config, null, 4));
+    console.log('Configuration file created:', configPath);
+}
+
