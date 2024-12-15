@@ -2,8 +2,8 @@ import { PolymarketService } from "../services/polymarket.service"
 import { Strategy } from "./strategy"
 import { ContractService } from "../services/contract.service"
 import { ListStrategy } from "./list-strategy"
-// import { BuyStrategy } from "./buy-strategy"
-// import { SellStrategy } from "./sell-strategy"
+import { BuyStrategy } from "./buy-strategy"
+import { SellStrategy } from "./sell-strategy"
 import { AllowanceStrategy } from "./allowance-strategy"
 import { OrderBookStrategy } from "./order-book-strategy"
 import { CancelAllStrategy } from "./cancel-all-strategy"
@@ -38,13 +38,13 @@ export class Context {
             strategy = new ListStrategy(this.polymarketService);
         }
         //buy token
-        // if (options.buy && options.buy.length === 3) {
-        //     strategy = new BuyStrategy(this.polymarketService);
-        // }
+        if (options.buy && options.buy.length === 3) {
+            strategy = new BuyStrategy(this.polymarketService);
+        }
         //sell token
-        // if (options.sell && options.sell.length === 3) {
-        //     strategy = new SellStrategy(this.polymarketService);
-        // }
+        if (options.sell && options.sell.length === 3) {
+            strategy = new SellStrategy(this.polymarketService);
+        }
         //set allowance
         if (options.allowance) {
             strategy = new AllowanceStrategy(this.contractService);

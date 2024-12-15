@@ -21,7 +21,6 @@ export class ContractService {
             console.log("Please provide valid private key and rpc provider in config.json file");
         }
     }
-
     async setAllowance(amountOfAllowedUSDC: number): Promise<any> {
         const currentBlockGasLimit = await this.getBlockGasLimit();
         const currentGasPrice = await this.polygonProvider.getGasPrice();
