@@ -6,15 +6,12 @@ import {
   OrderType,
   Side,
 } from "@polymarket/clob-client/dist/types";
-import axios from "axios";
 import { ethers } from "ethers";
 import { ConfigService } from "./config.service";
 let creds: ApiKeyCreds;
 const CLOB_API_ENDPOINT = "https://clob.polymarket.com/";
 const GAMMA_API_ENDPOINT = "https://gamma-api.polymarket.com/";
 interface Token {
-  // Define token properties as per documentation
-  // Example placeholder fields:
   token_id: string;
   outcome: string;
   price: number;
@@ -22,8 +19,6 @@ interface Token {
 }
 
 interface Rewards {
-  // Define rewards properties as per documentation
-  // Example placeholder fields:
   incentiveProgram: string;
   totalRewardPool: string;
 }
@@ -80,7 +75,9 @@ export class PolymarketService {
       CLOB_API_ENDPOINT,
       Chain.POLYGON,
       this.signer,
-      creds
+      creds,
+      2,
+      this.configService.get("funderAddress")
     );
   }
   async fetchAllMarkets(): Promise<Market[]> {
@@ -148,7 +145,7 @@ export class PolymarketService {
     let resp;
     if (side === Side.BUY) {
       //fill or kill
-      resp = await this.clobClient.postOrder(marketOrder, OrderType.FOK);
+      resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);
     } else if (side === Side.SELL) {
       //good till cancelled
       resp = await this.clobClient.postOrder(marketOrder, OrderType.GTC);

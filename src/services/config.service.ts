@@ -31,6 +31,7 @@ export class ConfigService {
             passphrase: '',
             rpcProvider: '',
             privateKey: '',
+            funderAddress: ''
         };
         if(!existsSync(homedir() + sep + polyCliDir)){
             mkdirSync(homedir() + sep + polyCliDir);
