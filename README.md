@@ -537,6 +537,14 @@ Response
 
 ---
 
+## Development 
+
+`npm i`  
+`npm run build`  
+`node dist/main -l "Oscar"` 
+
+---
+
 ## Issues
 
 Please use the [Issue Tracker](https://github.com/arekgotfryd/pmarket-cli/issues) to report any issues or bugs.
